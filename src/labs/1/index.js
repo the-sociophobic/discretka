@@ -53,8 +53,6 @@ export default class Lab1 extends Component {
 
     return (
       <div className="lab">
-        <h1 className="h1 mb-2">Лабораторная 1</h1>
-
         <div className="d-flex justify-content-between mb-5">
           <div className="">
             <Input

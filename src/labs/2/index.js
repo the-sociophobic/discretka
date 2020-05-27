@@ -32,7 +32,6 @@ export default class Lab2 extends Component {
 
   render = () => (
     <div className="lab">
-      <h1 className="h1 mb-5">Лабораторная 2</h1>
       <h3>Исходная булева функция, заданная с помощью Таблицы Истинности:</h3>
       <h3>{truthTable.reduce((a, b) => a + "" + b)}</h3>
       <br /><br />
