@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react'
 import Input from 'components/Input'
 import SetComponent from 'components/Set'
 import { generateRandomSet } from 'utils/sets'
+import clamp from 'utils/clamp'
 
 
 export default class SetCreation extends Component {
@@ -12,27 +13,6 @@ export default class SetCreation extends Component {
       setSize: props.universum.length,
     }
   }
-
-  renderGenerateButtons = () => (
-    <Fragment>
-      <Input
-        naturalNumber
-        value={this.state.setSize}
-        onChange={value => this.setState({setSize: value})}
-        label="количество элементов мультимножества"
-      />
-      {this.state.error}
-      <button
-        onClick={() =>
-          this.props.onChange(generateRandomSet(this.state.setSize, this.props.universum))}
-      >
-        Сгенерировать автоматически
-      </button>
-      <button onClick={() => this.setState({setCreationType: "manual"})}>
-        Сгенерировать вручную
-      </button>
-    </Fragment>
-  )
 
   renderUniversumWithButtons = () =>
     this.props.universum
@@ -70,29 +50,30 @@ export default class SetCreation extends Component {
       ...this.props.set.slice(index + 1),
     ])
 
-  renderGenerateTypes = () => {
-    switch (this.state.setCreationType) {
-      case "none":
-        return this.renderGenerateButtons()
-      case "manual":
-        return this.renderManualSetCreation()
-      default:
-        return <Fragment>
-            <h3 className="h3">Автоматически сгенерированное мультимножество ({this.props.set.length} элементов)</h3>
-            <SetComponent set={this.props.set} />
-          </Fragment>
-    }
-  }
-
   render = () => 
-    <Fragment>
-      <div className="col-1" />
-      <div className="col-4">
-        <h3 className="h3">Универсум</h3>
-        {this.renderUniversumWithButtons()}
-        
-        <SetComponent set={this.props.set} />
-      </div>
-      <div className="col-1" />
-    </Fragment>
+    <div className="">
+      <Input
+        zeroNumber
+        value={this.state.setSize}
+        onChange={value => this.setState({
+          setSize: clamp(value, 0, this.props.universum.length)
+        })}
+        label="мощность множества"
+      />
+      <button
+        onClick={() =>
+          this.props.onChange(
+            generateRandomSet(
+              this.state.setSize,
+              this.props.universum
+        ))}
+      >
+        Сгенерировать автоматически
+      </button>
+          
+      {this.renderUniversumWithButtons()}
+      
+      <h3 className="h3">Множество {this.props.name}</h3>
+      <SetComponent set={this.props.set} />
+    </div>
 }

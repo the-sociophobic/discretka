@@ -1,9 +1,8 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 import Input from 'components/Input'
 import SetComponent from 'components/Set'
 import SetCreation from './SetCreation'
-import { getPower } from '../../utils/sets'
 
 import {
   generateUniversum,
@@ -13,6 +12,10 @@ import {
   symmetricDifferenceSets,
   complementSets,
 } from 'utils/sets'
+import clamp from 'utils/clamp'
+
+
+const maxUniversumSize = 5
 
 
 export default class Lab1 extends Component {
@@ -20,10 +23,11 @@ export default class Lab1 extends Component {
     super(props)
     this.state = {
       dimension: 2,
-      universum: generateUniversum(2),
       setA: [],
       setB: [],
     }
+
+    this.universum = generateUniversum(maxUniversumSize)
   }
 
   renderSet = set =>
@@ -39,77 +43,70 @@ export default class Lab1 extends Component {
           </div>
         ))
 
-  renderUniversum = () => (
-    <Fragment>
-      <h3 className="h3">Универсум</h3>
-      <SetComponent set={this.state.universum} />
-      <h3 className="h3">2 множества</h3>
-      <div className="row">
-        <SetCreation
-          set={this.state.setA}
-          onChange={value => this.setState({setA: value})}
-          universum={this.state.universum}
-        />
-        <SetCreation
-          set={this.state.setB}
-          onChange={value => this.setState({setB: value})}
-          universum={this.state.universum}
-        />
-      </div>
-      {this.renderOperations()}
-    </Fragment>
-  )
-
-  renderOperations = () => {
-    const { setA, setB, universum } = this.state
+  render = () => {
+    const { dimension } = this.state
+    const universum = this.universum
+      .slice(0, dimension === 0 ? 0 : 2 ** dimension)
+      .map(elem => elem.slice(maxUniversumSize - dimension))
+    const setA = this.state.setA.filter(elem => universum.includes(elem))
+    const setB = this.state.setB.filter(elem => universum.includes(elem))
 
     return (
-      <Fragment>
-        <h3 className="h3">результаты всех действий над множествами</h3>
-        <div className="row">
-          <div className="col-2">
-            <p className="p">Объединение</p>
+      <div className="lab">
+        <h1 className="h1 mb-2">Лабораторная 1</h1>
+
+        <div className="d-flex justify-content-between mb-5">
+          <div className="">
+            <Input
+              zeroNumber
+              value={dimension}
+              onChange={value => this.setState({dimension: clamp(value, 0, maxUniversumSize)})}
+              label="размерность универсума"
+            />
+            <h3 className="h3">Универсум</h3>
+            <SetComponent set={universum} />
+          </div>
+          <SetCreation
+            name="A"
+            set={setA}
+            onChange={value => this.setState({setA: value})}
+            universum={universum}
+          />
+          <SetCreation
+            name="B"
+            set={setB}
+            onChange={value => this.setState({setB: value})}
+            universum={universum}
+          />
+        </div>
+
+        <div className="d-flex justify-content-between">
+          <div className="">
+            <h5 className="h5">A ∪ B</h5>
             <SetComponent set={unionSets(setA, setB)} />
           </div>
-          <div className="col-2">
-            <p className="p">Пересечение</p>
+          <div className="">
+            <h5 className="h5">A ∩ B</h5>
             <SetComponent set={intersectionSets(setA, setB)} />
           </div>
-          <div className="col-2">
-            <p className="p">Разность</p>
+          <div className="">
+            <h5 className="h5">A \ B</h5>
             <SetComponent set={relativeComplementSets(setA, setB)} />
           </div>
-          <div className="col-2">
-            <p className="p">Симметрическая разность</p>
+          <div className="">
+            <h5 className="h5">A Δ B</h5>
             <SetComponent set={symmetricDifferenceSets(setA, setB)} />
           </div>
-          <div className="col-2">
-            <p className="p">Дополнение A до U</p>
+          <div className="">
+            <h5 className="h5">Дополнение A до U</h5>
             <SetComponent set={complementSets(setA, universum)} />
           </div>
-          <div className="col-2">
-            <p className="p">Дополнение B до U</p>
+          <div className="">
+            <h5 className="h5">Дополнение B до U</h5>
             <SetComponent set={complementSets(setB, universum)} />
           </div>
         </div>
-      </Fragment>
+      </div>
     )
   }
-
-  render = () => (
-    <div className="lab">
-      <h1 className="h1 mb-5">Лабораторная 1</h1>
-      <Input
-        zeroNumber
-        value={this.state.dimension}
-        onChange={value => this.setState({
-          dimension: value,
-          universum: generateUniversum(value)
-        })}
-        label="размерность универсума"
-      />
-      <br />
-      {this.state.error || this.renderUniversum()}
-    </div>
-  )
 }

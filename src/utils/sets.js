@@ -1,3 +1,6 @@
+import randomArrayElements from './randomArrayElements'
+
+
 const grayCode = i =>
   i ^ (i >> 1)
 
@@ -8,53 +11,29 @@ const toBinaryString = (number, dimension) =>
   )
   .reduce((a, b) => a + b)
 
-const generateUniversum = universumDimension =>
-  universumDimension === 0 ?
+const generateUniversum = dimension =>
+  dimension === 0 ?
     []
     :
     Array.from(
-      {length: 2 ** universumDimension},
+      {length: 2 ** dimension},
       (item, index) => toBinaryString(
         grayCode(index),
-        universumDimension
+        dimension
       )
     )
 
-const getPower = universumDimension =>
-  2 ** universumDimension
-
 const generateRandomSet = (size, universum) =>
-  Array.from(
-    {length: size},
-    () => universum[
-      Math.floor(Math.random() * (universum.length - 1))
-    ]
-  )
+  randomArrayElements(universum, size)
 
 const unionSets = (setA, setB) => [
   ...setA,
   ...setB
 ]
 
-const intersectionSets = (setA, setB) => {
-  const filteredSetA = setA.filter(elem => setB.includes(elem))
-  let res = []
-
-  Array.from(new Set(filteredSetA)).forEach(elem => {
-    const amountInSetA = setA.filter(item => item === elem).length
-    const amountInSetB = setB.filter(item => item === elem).length
-
-    res = [
-      ...res,
-      ...Array.from(
-        {length: Math.max(amountInSetA, amountInSetB)},
-        () => elem
-      )
-    ]
-  })
-
-  return res
-}
+const intersectionSets = (setA, setB) =>
+  setA
+    .filter(elem => setB.includes(elem))
 
 const relativeComplementSets = (setA, setB) =>
   setA
@@ -72,9 +51,8 @@ const complementSets = (setA, universum) =>
     setA,
   )
 
+
 export {
-  getPower,
-  
   generateUniversum,
   generateRandomSet,
 

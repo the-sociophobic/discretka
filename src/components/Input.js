@@ -15,6 +15,9 @@ const Input = props => (
         switch (true) {
           case props.naturalNumber:
             value = e.target.value.toString().replace(/[^0-9]/g, '').replace(/^0*/g, '')
+            if (value.length === 0)
+              value = 1
+            value = parseInt(value)
             break
           case props.zeroNumber:
             value = e.target.value.toString().replace(/[^0-9]/g, '')
