@@ -26,7 +26,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentLab: 1
+      currentLab: 2
     }
   }
   

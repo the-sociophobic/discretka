@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Input from 'components/Input'
 import { plusOneTable, maxLength } from './tables'
 import myNumber from './myNumber'
+import tablesImg from './img/tablesImg.png'
 
 
 const clearString = string => {
@@ -57,21 +58,26 @@ export default class Lab3 extends Component {
 
     return (
       <div className="lab">
-        <h1 className="h1 mb-5">Курсовая Работа</h1>
-        <h3>таблица для +1</h3>
-        <h3>{plusOneTable.reduce((a, b) => a + "" + b)}</h3>
-        <br /><br />
-        <Input
-          value={this.state.stringA}
-          onChange={value => this.setState({stringA: clearString(value)})}
-          label="первое число"
-        />
-        <Input
-          value={this.state.stringB}
-          onChange={value => this.setState({stringB: clearString(value)})}
-          label="второе число"
-        />
-        <br /><br />
+        <div className="d-flex justify-content-between mb-3">
+          <div className="">
+            <h3>таблица для +1</h3>
+            <h3>{plusOneTable.reduce((a, b) => a + "" + b)}</h3>
+            <br /><br />
+            <Input
+              value={this.state.stringA}
+              onChange={value => this.setState({stringA: clearString(value)})}
+              label="первое число"
+            />
+            <Input
+              value={this.state.stringB}
+              onChange={value => this.setState({stringB: clearString(value)})}
+              label="второе число"
+            />
+          </div>
+          <div className="" style={{width: "35%"}}>
+            <img style={{width: "100%"}} src={tablesImg} />
+          </div>
+        </div>
         <div className="results">
           <div className="results__item results__item--title">
             <div className="results__item__hex">

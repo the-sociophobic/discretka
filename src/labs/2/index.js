@@ -35,7 +35,7 @@ export default class Lab2 extends Component {
       <h3>Исходная булева функция, заданная с помощью Таблицы Истинности:</h3>
       <h3>{truthTable.reduce((a, b) => a + "" + b)}</h3>
       <br /><br />
-      <div className="image-gallery">
+      {/* <div className="image-gallery">
         {[
           {
             src: initialTreeImg,
@@ -63,7 +63,7 @@ export default class Lab2 extends Component {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
       Исходная булева функция: {truthTable.reduce((a, b) => a + "" + b)} <br />
       Полином Жегалкина: {printZhegalkin(calcZhegalkin(truthTable))} <br />
       СДНФ: {printForm(calcSDNF(truthTable), "∧", " ∨ ")} <br />

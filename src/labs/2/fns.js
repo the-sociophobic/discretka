@@ -24,41 +24,40 @@ const iterateOverTable = fn => {
 }
 
 const calcSDNF = truthTable => {
-  let res = []
+  let SDNF = []
 
   iterateOverTable((x, y, z, w, index) =>
     truthTable[index] &&
-      res.push([x, y, z, w])
-  )
+      SDNF.push([x, y, z, w]))
 
-  return res
+  return SDNF
 }
 
 const calcSKNF = truthTable => {
-  let res = []
+  let SKNF = []
 
   iterateOverTable((x, y, z, w, index) =>
     !truthTable[index] &&
-      res.push([negate(x), negate(y), negate(z), negate(w)])
-  )
+      SKNF.push([negate(x), negate(y), negate(z), negate(w)]))
 
-  return res
+  return SKNF
 }
 
 const calcZhegalkin = truthTable => {
-  let res = [truthTable]
+  let Zhegalkin = [truthTable]
 
   for (let i = 1; i < truthTable.length; i++) {
     let column = new Array(truthTable.length - i)
 
     for (let j = i; j < truthTable.length; j++)
       column[truthTable.length - 1 - j] =
-        res[i - 1][truthTable.length - j] ^ res[i - 1][truthTable.length - 1 - j]
+        Zhegalkin[i - 1][truthTable.length - j] ^
+        Zhegalkin[i - 1][truthTable.length - 1 - j]
 
-    res.push(column)
+    Zhegalkin.push(column)
   }
 
-  return res.map(column => column[0])
+  return Zhegalkin.map(column => column[0])
 }
 
 const printForm = (form, delimeter0, delimeter1) =>
